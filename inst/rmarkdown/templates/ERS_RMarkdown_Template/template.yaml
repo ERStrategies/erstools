@@ -1,0 +1,3 @@
+name: "ERS RMarkdown Template"
+description: "Use this template as a starting place for all your RMarkdown files :)"
+create_dir: false  # Indicates that a new directory will not be created
