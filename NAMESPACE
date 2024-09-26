@@ -2,6 +2,8 @@
 
 export(read_sharepoint_ers)
 export(square)
+export(write_sharepoint_ers)
 import(Microsoft365R)
 import(data.table)
+import(openxlsx)
 import(readxl)
