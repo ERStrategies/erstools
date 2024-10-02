@@ -14,3 +14,6 @@ Imports:
     data.table,
     readxl,
     openxlsx
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

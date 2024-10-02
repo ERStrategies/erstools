@@ -7,7 +7,7 @@
 read_sharepoint_ers(
   folder_path,
   file_name_with_extension,
-  drive_name = client_work_drive,
+  drive_name = "client_work_drive",
   sheet_name = NULL,
   skip_rows = 0,
   na_values = c("", "N/A", "NA", "Missing")
@@ -18,7 +18,7 @@ read_sharepoint_ers(
 
 \item{file_name_with_extension}{REQUIRED: File name. Example: "student_performance.csv"}
 
-\item{drive_name}{OPTIONAL: By default it is set to client work, if you want to access something from internal, then change to internal_drive}
+\item{drive_name}{OPTIONAL: By default it is set to "client_work_drive", if you want to access something from internal, then change to "internal_drive"}
 
 \item{sheet_name}{OPTIONAL: Only required if you have an excel spreadsheet with multiple sheets. Example: "Sheet 2"}
 

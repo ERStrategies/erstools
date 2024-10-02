@@ -10,11 +10,12 @@
 #' @import Microsoft365R
 #' @import openxlsx
 #' @import data.table
-write_sharepoint_ers <- function(data,
+ers_write_sharepoint <- function(data,
                                  folder_path,
                                  file_name_with_extension,
-                                 drive_name = client_work_drive) {
-  #set sharepoint site URL for access to our org-wide and external files
+                                 drive_name = "client_work_drive") {
+
+    #set sharepoint site URL for access to our org-wide and external files
   orgfiles_site_url <- "https://erstrategies1.sharepoint.com/sites/orgfiles"
   #access sharepoint site URL you may be prompted to sign in here
   orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
@@ -23,7 +24,23 @@ write_sharepoint_ers <- function(data,
   client_work_drive <- orgfiles_site$get_drive("Client Work")
   #see all folders in internal work drive
   internal_drive <- orgfiles_site$get_drive("Internal")
-  # Construct the full data path
+
+  # Determine which drive to use (client work by default)
+  if (drive_name == "client_work_drive") {
+    drive <- client_work_drive
+  } else if (drive_name == "internal_drive") {
+    drive <- internal_drive
+  } else {
+    stop("Invalid drive name. Use 'client_work_drive' or 'internal_drive'.")
+  }
+
+  # Check if the folder exists using get_item()
+  folder_item <- try(drive$get_item(folder_path), silent = TRUE)
+  if (inherits(folder_item, "try-error")) {
+    stop("Folder path does not exist: '", folder_path, "'")
+  }
+
+    # Construct the full data path
   file_extension <- ifelse(tools::file_ext(file_name_with_extension) == "csv", ".csv", ".xlsx")
   data_path <- file.path(folder_path, file_name_with_extension)
 
@@ -34,11 +51,11 @@ write_sharepoint_ers <- function(data,
   if (file_extension == ".csv") {
     fwrite(data, temp_file, row.names = FALSE, dateTimeAs = "write.csv")
   } else {
-    write.xlsx(data, temp_file, rowNames = FALSE)
+    write.xlsx(data, temp_file, rowNames = FALSE, asTable = TRUE)
   }
 
   # Upload the file to the specified drive
-  drive_name$upload_file(temp_file, dest = data_path)
+  drive$upload_file(temp_file, dest = data_path)
 
   # Return the path of the uploaded file
   return(paste0("Uploaded ", file_name_with_extension, " to: '", folder_path, "'"))

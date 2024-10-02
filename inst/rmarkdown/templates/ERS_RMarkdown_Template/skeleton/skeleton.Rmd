@@ -56,8 +56,9 @@ library(erstools) #includes functions like read_sharepoint_ers, write_sharepoint
 #load data
 library(Microsoft365R) # Use Microsoft365R to connect to SharePoint and load files
 library(readxl) # Functions for reading Excel files: read_excel
-library(writexl) # Functions for writing Excel files: write_xlsx
+library(openxlsx) # Functions for writing Excel files: write.xlsx
 library(rmarkdown) # needed to create knitted files in output folder
+
 #manipulate data
 library(tidyverse) # Includes ggplot2, dplyr, tidyr, readr, etc.
 library(data.table) # fread(): load large CSVs quickly
@@ -81,6 +82,8 @@ Part 1: Bring in your data
 ```{r}
 #set sharepoint site URL for access to our org-wide and external files
 orgfiles_site_url <- "https://erstrategies1.sharepoint.com/sites/orgfiles"
+#access sharepoint site URL you may be prompted to sign in here
+orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
 ```
 
 ### 1.1 Set your folder path(s)
@@ -190,24 +193,10 @@ write_sharepoint_ers(data = DSI_test_data,
 
 ### 1. ers_table
 
-##### JK Comments:
 
-Similar Fb under ers_info function! I actually think you did that with the write files function?
 
 ```{r}
 #turns your unpolished R tables into a table with nice formatting and a bolded table title
 #Example: ers_table(dataset = NCES_District_FY19, title = "FY19 District Financials")
-ers_table <- function(dataset, title) {
-  dataset %>% 
-  gt() %>% 
-  tab_header(title) %>% 
-  opt_stylize(style = 3) %>% 
-  tab_style(style = cell_text(align = "left",
-                              weight = "bold",
-                              size = "x-large"),
-            locations = cells_title("title")) %>% 
-  tab_style(style = cell_text(weight = "bold"),
-            locations = cells_column_labels())
-}
-
 ```
+
