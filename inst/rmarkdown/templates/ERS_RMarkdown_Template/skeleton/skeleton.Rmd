@@ -52,7 +52,7 @@ devtools::install_github("ERStrategies/erstools", auth_token = Sys.getenv("GITHU
 
 ```{r, warning = F, message = F}
 #ERS-specific functions!!
-library(erstools) #includes functions like read_sharepoint_ers, write_sharepoint_ers, ers_table, and col_info
+library(erstools) #includes functions like ers_read_sharepoint, ers_write_sharepoint, ers_table, and col_info
 #load data
 library(Microsoft365R) # Use Microsoft365R to connect to SharePoint and load files
 library(readxl) # Functions for reading Excel files: read_excel
@@ -104,12 +104,12 @@ raw_data_folder_path <- "District Partners/Columbus City/22-23 Financial Equity 
 
 ```
 
-### 1.2 See guidance on using the "read_sharepoint_ers" function 
+### 1.2 See guidance on using the "ers_read_sharepoint" function 
 
 **ACTION: Run the code below to see documentation on our custom function!**
 
 ```{r}
-?read_sharepoint_ers
+?ers_read_sharepoint
 ```
 
 ### 1.3 Read in your data
@@ -118,7 +118,7 @@ raw_data_folder_path <- "District Partners/Columbus City/22-23 Financial Equity 
 
 ```{r}
 
-raw_data <- read_sharepoint_ers(folder_path = raw_data_folder_path,
+raw_data <- ers_read_sharepoint(folder_path = raw_data_folder_path,
                     file_name_with_extension = "XXX.csv")
 ```
 
@@ -132,71 +132,83 @@ View(raw_data)
 
 ## Part 2: Validate Data
 
-### 2.0 Use ers_col_info function to validate data'
-
-
-```{r}
-#col_info function takes your data frame and outputs column information
-#Example: ers_col_info(NCES_District_FY19)
-ers_col_info <- function(data_name) 
-  {data.frame(
-    Column_Name = names(data_name),
-    Data_Type = sapply(data_name, class),
-    Count_Rows = sapply(data_name, function(x) length(na.omit(x))),
-    NA_Rows = sapply(data_name, function(x) sum(is.na(x))),
-    Missing_Rows = sapply(data_name, function(x) sum(x == "", na.rm = T)),
-    Unique_Rows = sapply(data_name, function(x) length(unique(na.omit(x)))),
-    stringsAsFactors = FALSE,
-    row.names= NULL) 
-  %>% flextable
-
-  }
-
-```
-
-## Part Y: Upload File to Sharepoint
-
-### Y.1 Set output data folder Path
-
-
-**ACTION: Change the processed_data_folder_path to the path to your data. The folder path must start with either "District Partners" or "Internal". See the comments below for guidance on how to find the path**
-
-```{r}
-processed_data_folder_path <- "District Partners/Yakima/"
-```
-
-
-### Y.2 See guidance on using the "write_sharepoint_ers" function 
+### 2.0 Check out the ers_column_info function as a starting place in your data validation (credits to Mauro!)
 
 **ACTION: Run the code below to see documentation on our custom function!**
 
 ```{r}
-?write_sharepoint_ers
+#col_info function takes your data frame and outputs column information
+#Example: ers_col_info(NCES_District_FY19)
+?ers_column_info
+
 ```
 
-### Y.3 Write files
+### 2.1 Run ers_column_info on your data
 
-**ACTION: Replace "raw_data" with your desired name of your data and replace "XXX.csv" with the desired name of your output file.**
+**ACTION: Replace "raw_data" with the name of your data frame**
 
 ```{r}
-#Example
-write_sharepoint_ers(data = DSI_test_data,
-                     folder_path = processed_data_folder_path,
-                     file_name_with_extension = "XXX.csv")
+ers_column_info(raw_data)
 ```
 
-## Part Z: Knit the file
+## Part 3: Process your data (more to come here later)
 
-**ACTION: Use Ctrl+Shift+K to knit your file into a nicely formatted HTML/Word document that you can share with teammates!**
+## Part 4: Analyze/view your data
 
-## Appendix: ERS Functions to Use
+### 4.0 Check out the ers_table function to make your tables nice using the gt package (credits to Mauro!)
 
-### 1. ers_table
-
-
+**ACTION: Run the code below to see documentation on our custom function!**
 
 ```{r}
 #turns your unpolished R tables into a table with nice formatting and a bolded table title
 #Example: ers_table(dataset = NCES_District_FY19, title = "FY19 District Financials")
 ```
+
+
+### 4.1 Run ers_table on your data
+
+**ACTION: Replace "raw_data" with the name of your data frame and XXX with the desired title of your table**
+
+```{r}
+ers_table(dataset = raw_data, title = "XXX")
+```
+
+## Part 5: Upload File to Sharepoint
+
+### 5.1 Set output data folder Path
+
+
+**ACTION: Change the processed_data_folder_path to the path to your data. The folder path must start with either "District Partners" or "Internal". See the comments below for guidance on how to find the path**
+
+```{r}
+processed_data_folder_path <- "District Partners/Yakima"
+```
+
+
+### 5.2 See guidance on using the "ers_write_sharepoint" function 
+
+**ACTION: Run the code below to see documentation on our custom function!**
+
+```{r}
+?ers_write_sharepoint
+```
+
+### 5.3 Write files
+
+**ACTION: Replace "raw_data" with your desired name of your data and replace "XXX.csv" with the desired name of your output file.**
+
+```{r}
+#Example
+ers_write_sharepoint(data = raw_data,
+                     folder_path = processed_data_folder_path,
+                     file_name_with_extension = "XXX.csv")
+```
+
+## Part 6: Knit the file
+
+**ACTION: Use Ctrl+Shift+K to knit your file into a nicely formatted HTML/Word document that you can share with teammates!**
+
+
+
+
 

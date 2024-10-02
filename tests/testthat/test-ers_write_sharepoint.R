@@ -53,7 +53,7 @@ test_that("Data integrity is maintained after upload", {
   ers_write_sharepoint(sample_data, folder_path, file_name, drive_name = "internal_drive")
 
   # Read back the uploaded file
-  uploaded_data <- read_sharepoint_ers(folder_path, file_name, drive_name = "internal_drive") %>% as.data.frame()
+  uploaded_data <- ers_read_sharepoint(folder_path, file_name, drive_name = "internal_drive") %>% as.data.frame()
   # Print structure for debugging
   print(str(uploaded_data))
   print(str(sample_data))
