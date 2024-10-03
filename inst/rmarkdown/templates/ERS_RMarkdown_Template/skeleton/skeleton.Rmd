@@ -23,36 +23,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Part 0: Read Libraries and connect to Sharepoint
 
-### 0.0 START HERE: Save a GitHub token so that you can download our custom ERS Library! (ONLY NEED TO DO THIS ONCE)
+### 0.1 (OPTIONAL) Install the latest version of the erstools library!
 
-1. Create a token in GitHub: Go to Github -> click on your profile in upper right -> Settings -> Scroll all the way down to "Developer Settings" -> Personal access tokens -> Tokens (classic) -> Generate new token -> Generate new token (classic) -> Choose custom expiration date (one year in the future) -> check only the "repo" box for scopes -> Copy the token)
-2. Run the following in R to open the .Renviron file (this stores environment variables): usethis::edit_r_environ()
-3. Add the following line to the file (replacing your_github_token with the token you copied from GitHub): GITHUB_PAT=your_github_token
-4. Save the file and restart the R session. Now R will automatically use the token for GitHub authentication.
+**ACTION: Remove the "#"s and run the code below if you want to update the erstools package and get access to the newest ERS functions and the newest RMarkdown Template!**
 
-
-### 0.1 Load the devtools library
-
-**ACTION: install the "devtools" package first if you don't have it**
+**NOTE: To use the new RMarkdown template you need to close out of Rstudio and reopen it after running ers_update_erstools()**
 
 ```{r}
-# install.packages("devtools")
-library(devtools)
+# library(devtools)
+# library(erstools)
+# ers_update_erstools()
 ```
 
-### 0.2 Install latest version of ERS Library!
+### 0.2 Read All Libraries 
 
-**ACTION: A prompt might come up in your console below. Type 1 and press enter for All**
-
-```{r}
-devtools::install_github("ERStrategies/erstools", auth_token = Sys.getenv("GITHUB_PAT"))
-```
-
-### 0.3 Read Other Libraries
+**ACTION: Run the code and read the comments for different functions you will have access to**
 
 ```{r, warning = F, message = F}
 #ERS-specific functions!!
-library(erstools) #includes functions like ers_read_sharepoint, ers_write_sharepoint, ers_table, and col_info
+library(erstools) #includes functions like ers_read_sharepoint, ers_write_sharepoint, ers_table, and ers_column_info
 #load data
 library(Microsoft365R) # Use Microsoft365R to connect to SharePoint and load files
 library(readxl) # Functions for reading Excel files: read_excel
@@ -77,7 +66,7 @@ Part 1: Bring in your data
 
 ### 1.0 Authenticate to sharepoint to be able to read in files
 
-**ACTION: Look at your console code window below for instructions to log in. A window will probably open in your browser to ask you to log into Microsoft to confirm your identity**
+**ACTION: After running the code, look at your console code window below for instructions to log in. A window will probably open in your browser to ask you to log into Microsoft to confirm your identity**
 
 ```{r}
 #set sharepoint site URL for access to our org-wide and external files
@@ -90,18 +79,10 @@ orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
 
 **ACTION: Change the raw_data_folder_path to the path to your data. The folder path must start with either "District Partners" or "Internal". See the comments below for guidance on how to find the path**
 
+**NOTE: If you don't want to type the name of your folder path, you can copy it directly from Sharepoint: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r**
+
 ```{r}
 raw_data_folder_path <- "District Partners/Columbus City/22-23 Financial Equity & Funding System Design/1. Data & Analysis - Secure/Raw Data for R"
-
-# (Optional Guidance below) If you don't want to find the exact name of your folder path, you can copy it directly from Sharepoint: 
-# 1. Navigate to the folder where your file exists in sharepoint 
-# 2. click on the three dots (...) next to the folder
-# 3. Click Details
-# 4. Scroll all the way down past "activity" until you can copy the path by clicking the button next to "Path". If the list of activities is too long, then find a file within the folder and copy its path (then just remove the last part of the path with the name of the file)
-# 5. Paste the Path in R
-# 6. Use find and replace to replace instances of "%20" with spaces: " "
-# 7. Remove the first part of the file path "https://erstrategies1.sharepoint.com/sites/orgfiles/Client Work" so that your path just starts with "District Partners" or "Internal". R already knows which sharepoint site to pull the folder from
-
 ```
 
 ### 1.2 See guidance on using the "ers_read_sharepoint" function 
