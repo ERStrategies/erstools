@@ -6,6 +6,7 @@
 #' @return Nothing. Your package will be installed
 #' @export
 #' @import devtools
+#' @import utils
 ers_update_erstools <- function(pkg_name = "erstools", upgrade = "always") {
   # Check if the package is already loaded
   if (pkg_name %in% loadedNamespaces()) {
@@ -17,6 +18,16 @@ ers_update_erstools <- function(pkg_name = "erstools", upgrade = "always") {
       message("Package detached.")
     }, error = function(e) {
       message("Error while detaching: ", e$message)
+    })
+  }
+
+  # Remove the package completely if it is installed
+  if (pkg_name %in% installed.packages()) {
+    tryCatch({
+      remove.packages(pkg_name)
+      message("Package successfully removed.")
+    }, error = function(e) {
+      message("Error during removal: ", e$message)
     })
   }
 

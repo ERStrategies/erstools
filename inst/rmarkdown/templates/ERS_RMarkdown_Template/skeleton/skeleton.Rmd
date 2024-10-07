@@ -1,7 +1,7 @@
 ---
-title: "1. Template Script"
+title: "Oct. 2024 Template Script"
 author: "Zach Friedman"
-date: "2024-07-19"
+date: "`r Sys.Date()`"
 output:
   html_document:
     toc: true
@@ -42,6 +42,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, warning = F, message = F}
 #ERS-specific functions!!
 library(erstools) #includes functions like ers_read_sharepoint, ers_write_sharepoint, ers_table, and ers_column_info
+
 #load data
 library(Microsoft365R) # Use Microsoft365R to connect to SharePoint and load files
 library(readxl) # Functions for reading Excel files: read_excel
@@ -54,6 +55,7 @@ library(data.table) # fread(): load large CSVs quickly
 library(janitor) # Functions for cleaning and examining data: clean_names() instantly formats all column names
 library(safejoin) # Provides safer join operations for 1:many matching - safe_left_join()
 library(stringr) # str_detect(): pattern matching using regular expressions (see regex101.com)
+
 #format and display data
 library(scales) # Functions for scaling and formatting axes in plots: comma(), percent()
 library(gt) # Creates and formats tables in a publication-ready format: gt()
@@ -62,14 +64,14 @@ library(extrafont) # Manages and uses custom fonts in plots - loadfonts(): Loads
 
 ```
 
-Part 1: Bring in your data
+## Part 1: Bring in your data
 
 ### 1.0 Authenticate to sharepoint to be able to read in files
 
-**ACTION: After running the code, look at your console code window below for instructions to log in. A window will probably open in your browser to ask you to log into Microsoft to confirm your identity**
+**ACTION: After running the code, you may need to look at your console code window below for instructions to log in. A window will probably open in your browser to ask you to log into Microsoft to confirm your identity**
 
 ```{r}
-#set sharepoint site URL for access to our org-wide and external files
+#set sharepoint site URL for access to our org-wide files
 orgfiles_site_url <- "https://erstrategies1.sharepoint.com/sites/orgfiles"
 #access sharepoint site URL you may be prompted to sign in here
 orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
@@ -77,7 +79,7 @@ orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
 
 ### 1.1 Set your folder path(s)
 
-**ACTION: Change the raw_data_folder_path to the path to your data. The folder path must start with either "District Partners" or "Internal". See the comments below for guidance on how to find the path**
+**ACTION: Change the raw_data_folder_path to the path to your data. The folder path must start with a folder that is at the "Client Work" level. Exmaples include "District Partners", "Internal", "State Partners", etc.**
 
 **NOTE: If you don't want to type the name of your folder path, you can copy it directly from Sharepoint: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r**
 
@@ -95,10 +97,9 @@ raw_data_folder_path <- "District Partners/Columbus City/22-23 Financial Equity 
 
 ### 1.3 Read in your data
 
-**ACTION: Replace "raw_data" with the desired name of your data frame and replace "XXX.csv" with the file name.**
+**ACTION: Replace "raw_data" with the desired name of your data frame and replace "XXX.csv" with the file name. We suggest doing this for all instances of raw data by using the find and replace tool (Ctrl + F and then replace all instances of "raw_data" with the desired name.**
 
 ```{r}
-
 raw_data <- ers_read_sharepoint(folder_path = raw_data_folder_path,
                     file_name_with_extension = "XXX.csv")
 ```
@@ -118,10 +119,7 @@ View(raw_data)
 **ACTION: Run the code below to see documentation on our custom function!**
 
 ```{r}
-#col_info function takes your data frame and outputs column information
-#Example: ers_col_info(NCES_District_FY19)
 ?ers_column_info
-
 ```
 
 ### 2.1 Run ers_column_info on your data
@@ -141,8 +139,7 @@ ers_column_info(raw_data)
 **ACTION: Run the code below to see documentation on our custom function!**
 
 ```{r}
-#turns your unpolished R tables into a table with nice formatting and a bolded table title
-#Example: ers_table(dataset = NCES_District_FY19, title = "FY19 District Financials")
+?ers_table
 ```
 
 
@@ -158,8 +155,7 @@ ers_table(dataset = raw_data, title = "XXX")
 
 ### 5.1 Set output data folder Path
 
-
-**ACTION: Change the processed_data_folder_path to the path to your data. The folder path must start with either "District Partners" or "Internal". See the comments below for guidance on how to find the path**
+**ACTION: Change the processed_data_folder_path to the path to your data. The folder path must start with a folder that is at the "Client Work" level: "District Partners", "Internal", "State Partners", etc..**
 
 ```{r}
 processed_data_folder_path <- "District Partners/Yakima"
@@ -176,7 +172,7 @@ processed_data_folder_path <- "District Partners/Yakima"
 
 ### 5.3 Write files
 
-**ACTION: Replace "raw_data" with your desired name of your data and replace "XXX.csv" with the desired name of your output file.**
+**ACTION: Replace "raw_data" with your desired name of your data and replace "XXX.csv" with the desired name of your output file. You can output CSV or XLSX files**
 
 ```{r}
 #Example
