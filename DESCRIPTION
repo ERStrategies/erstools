@@ -13,7 +13,7 @@ Imports:
     Microsoft365R,
     data.table,
     readxl,
-    openxlsx,
+    writexl,
     gt,
     tidyverse,
     stats,

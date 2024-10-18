@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### 0.1 (OPTIONAL) Install the latest version of the erstools library!
 
-**ACTION: Remove the "#"s and run the code below if you want to update the erstools package and get access to the newest ERS functions and the newest RMarkdown Template!**
+**ACTION: Remove the "\#"s and run the code below if you want to update the erstools package and get access to the newest ERS functions and the newest RMarkdown Template!**
 
 **NOTE: To use the new RMarkdown template you need to close out of Rstudio and reopen it after running ers_update_erstools()**
 
@@ -35,7 +35,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # ers_update_erstools()
 ```
 
-### 0.2 Read All Libraries 
+### 0.2 Read All Libraries
 
 **ACTION: Run the code and read the comments for different functions you will have access to**
 
@@ -46,8 +46,8 @@ library(erstools) #includes functions like ers_read_sharepoint, ers_write_sharep
 #load data
 library(Microsoft365R) # Use Microsoft365R to connect to SharePoint and load files
 library(readxl) # Functions for reading Excel files: read_excel
+library(writexl) # Functions for writing Excel files: write_xlsx
 library(openxlsx) # Functions for writing Excel files: write.xlsx
-library(rmarkdown) # needed to create knitted files in output folder
 
 #manipulate data
 library(tidyverse) # Includes ggplot2, dplyr, tidyr, readr, etc.
@@ -62,6 +62,9 @@ library(gt) # Creates and formats tables in a publication-ready format: gt()
 library(flextable) # Creates and formats tables in a publication-ready format: flextable()
 library(extrafont) # Manages and uses custom fonts in plots - loadfonts(): Loads fonts available on the system
 
+#share output with supervisor
+library(rmarkdown) # needed to create knitted files in output folder
+library(downloadthis) # create download buttons in your knitted file so that a supervisor can download data in Excel!
 ```
 
 ## Part 1: Bring in your data
@@ -69,6 +72,8 @@ library(extrafont) # Manages and uses custom fonts in plots - loadfonts(): Loads
 ### 1.0 Authenticate to sharepoint to be able to read in files
 
 **ACTION: After running the code, you may need to look at your console code window below for instructions to log in. A window will probably open in your browser to ask you to log into Microsoft to confirm your identity**
+
+**NOTE: If you ever have authentication issues, first run this in your console then try running the code chunk below again. This clears your authentication settings: AzureAuth::clean_token_directory()**
 
 ```{r}
 #set sharepoint site URL for access to our org-wide files
@@ -79,15 +84,15 @@ orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
 
 ### 1.1 Set your folder path(s)
 
-**ACTION: Change the raw_data_folder_path to the path to your data. The folder path must start with a folder that is at the "Client Work" level. Exmaples include "District Partners", "Internal", "State Partners", etc.**
+**ACTION: Change the raw_data_folder_path to the path to your data. The folder path must start with a folder that is at the "Client Work" level. Examples include "District Partners", "Internal", "State Partners", etc.**
 
-**NOTE: If you don't want to type the name of your folder path, you can copy it directly from Sharepoint: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r**
+**NOTE: If you don't want to type the name of your folder path, you can copy it directly from Sharepoint: <https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r>**
 
 ```{r}
 raw_data_folder_path <- "District Partners/Columbus City/22-23 Financial Equity & Funding System Design/1. Data & Analysis - Secure/Raw Data for R"
 ```
 
-### 1.2 See guidance on using the "ers_read_sharepoint" function 
+### 1.2 See guidance on using the "ers_read_sharepoint" function
 
 **ACTION: Run the code below to see documentation on our custom function!**
 
@@ -142,7 +147,6 @@ ers_column_info(raw_data)
 ?ers_table
 ```
 
-
 ### 4.1 Run ers_table on your data
 
 **ACTION: Replace "raw_data" with the name of your data frame and XXX with the desired title of your table**
@@ -155,14 +159,13 @@ ers_table(dataset = raw_data, title = "XXX")
 
 ### 5.1 Set output data folder Path
 
-**ACTION: Change the processed_data_folder_path to the path to your data. The folder path must start with a folder that is at the "Client Work" level: "District Partners", "Internal", "State Partners", etc..**
+**ACTION: Change the processed_data_folder_path to the path to your data. The folder path must start with a folder that is just below the "Client Work" level: "District Partners", "Internal", "State Partners", etc..**
 
 ```{r}
 processed_data_folder_path <- "District Partners/Yakima"
 ```
 
-
-### 5.2 See guidance on using the "ers_write_sharepoint" function 
+### 5.2 See guidance on using the "ers_write_sharepoint" function
 
 **ACTION: Run the code below to see documentation on our custom function!**
 
@@ -184,8 +187,3 @@ ers_write_sharepoint(data = raw_data,
 ## Part 6: Knit the file
 
 **ACTION: Use Ctrl+Shift+K to knit your file into a nicely formatted HTML/Word document that you can share with teammates!**
-
-
-
-
-

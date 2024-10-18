@@ -8,7 +8,7 @@
 #' @return A message that your file was successfully uploaded.
 #' @export
 #' @import Microsoft365R
-#' @import openxlsx
+#' @import writexl
 #' @import data.table
 ers_write_sharepoint <- function(data,
                                  folder_path,
@@ -33,7 +33,7 @@ ers_write_sharepoint <- function(data,
   } else {
     stop("Invalid drive name. Use 'client_work_drive' or 'internal_drive'.")
   }
-
+  folder_path <- sub("^/|/$", "", folder_path)
   # Check if the folder exists using get_item()
   folder_item <- try(drive$get_item(folder_path), silent = TRUE)
   if (inherits(folder_item, "try-error")) {
@@ -51,7 +51,7 @@ ers_write_sharepoint <- function(data,
   if (file_extension == ".csv") {
     fwrite(data, temp_file, row.names = FALSE, dateTimeAs = "write.csv")
   } else {
-    write.xlsx(data, temp_file, rowNames = FALSE, asTable = TRUE)
+    writexl::write_xlsx(data, temp_file)
   }
 
   # Upload the file to the specified drive
