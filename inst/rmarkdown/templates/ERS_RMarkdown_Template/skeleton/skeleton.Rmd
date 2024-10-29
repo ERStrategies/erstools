@@ -190,7 +190,7 @@ current_file <- rstudioapi::getActiveDocumentContext()$path
 
 # Determine the output directory and file name for the knitted HTML
 output_dir <- dirname(current_file)
-output_file <- paste0(tools::file_path_sans_ext(basename(current_file)), ".html")
+output_file <- gsub(" ", "-", paste0(tools::file_path_sans_ext(basename(current_file)), ".html"))
 knitted_file <- file.path(output_dir, "knitted files", output_file)
 
 
