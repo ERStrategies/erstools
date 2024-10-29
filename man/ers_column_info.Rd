@@ -4,10 +4,12 @@
 \alias{ers_column_info}
 \title{Output your data as a nicely formatted table using the gt package}
 \usage{
-ers_column_info(dataset)
+ers_column_info(dataset, title = "Data Column Summary")
 }
 \arguments{
 \item{dataset}{REQUIRED: The data that you want to make into a table}
+
+\item{title}{OPTIONAL: Title of the table in quotes. Default: "Data Column Summary"}
 }
 \value{
 Some basic validation checks on your data for all columns. Includes type, na and missing values, unique values, and more

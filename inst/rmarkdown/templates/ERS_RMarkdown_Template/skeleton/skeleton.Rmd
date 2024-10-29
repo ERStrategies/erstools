@@ -22,15 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### 0.1 (OPTIONAL) Install the latest version of the erstools library!
 
-**ACTION: Remove the "\#"s and run the code below if you want to update the erstools package and get access to the newest ERS functions and the newest RMarkdown Template!**
-
-**NOTE: To use the new RMarkdown template you need to close out of Rstudio and reopen it after running ers_update_erstools()**
-
-```{r}
-# library(devtools)
-# library(erstools)
-# ers_update_erstools()
-```
+**ACTION: If you aren't sure if you have the most up to date release of erstools, follow these instructions: https://app.tettra.co/teams/ersknowledge/pages/updating-erstools-functions-markdown-template**
 
 ### 0.2 Read All Libraries
 
@@ -68,9 +60,9 @@ library(downloadthis) # create download buttons in your knitted file so that a s
 
 ### 1.0 Authenticate to sharepoint to be able to read in files
 
-**ACTION: After running the code, you may need to look at your console code window below for instructions to log in. A window will probably open in your browser to ask you to log into Microsoft to confirm your identity**
+**ACTION: After running the code, you may need to look at your console code window below for instructions to log in. A window may open in your browser to ask you to log into Microsoft to confirm your identity**
 
-**NOTE: If you ever have authentication issues, first run this in your console then try running the code chunk below again. This clears your authentication settings: AzureAuth::clean_token_directory()**
+**NOTE: If you ever have authentication issues, first run this in your console then try running the code chunk below again - AzureAuth::clean_token_directory()**
 
 ```{r}
 #set sharepoint site URL for access to our org-wide files
@@ -103,7 +95,7 @@ raw_data_folder_path <- "District Partners/Columbus City/22-23 Financial Equity 
 
 ```{r}
 raw_data <- ers_read_sharepoint(folder_path = raw_data_folder_path,
-                    file_name_with_extension = "XXX.csv")
+                   file_name_with_extension = "XXX.csv")
 ```
 
 ### 1.4 View your data
@@ -181,6 +173,30 @@ ers_write_sharepoint(data = raw_data,
                      file_name_with_extension = "XXX.csv")
 ```
 
-## Part 6: Knit the file
+## Part 6: Knit the file into a nicely formatted HTML that you can share with teammates!
 
-**ACTION: Use Ctrl+Shift+K to knit your file into a nicely formatted HTML/Word document that you can share with teammates!**
+**ACTION: ALL YOU NEED TO DO IS Use Ctrl+Shift+K to knit your file, and it will upload an html file to your Github repo in a folder called "knitted files"!**
+
+## OPTIONAL Part 7: Upload knitted file to Sharepoint
+
+**ACTION: If you have made changes to your file since last knitting, make sure to knit first before running the code below. It will upload your knitted file to your "processed_data_folder_path" but you can change the destination_of_knitted_file below.**
+
+```{r eval = FALSE}
+# You can change the destination path of your knitted file here if you wish
+destination_of_knitted_file <- processed_data_folder_path
+
+# Define the path to the current R Markdown file
+current_file <- rstudioapi::getActiveDocumentContext()$path
+
+# Determine the output directory and file name for the knitted HTML
+output_dir <- dirname(current_file)
+output_file <- paste0(tools::file_path_sans_ext(basename(current_file)), ".html")
+knitted_file <- file.path(output_dir, "knitted files", output_file)
+
+
+client_work_drive <- orgfiles_site$get_drive("Client Work")
+
+client_work_drive$upload_file(knitted_file, dest = file.path(destination_of_knitted_file, output_file))
+```
+
+

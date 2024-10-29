@@ -1,6 +1,6 @@
 Package: erstools
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: ERS RMarkdown Template and Functions to Read, Write, Validate, and Visualize Data
+Version: 1.0.0
 Authors@R: 
     person("Zach", "Friedman", , "zfriedman@erstrategies.org", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
