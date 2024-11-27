@@ -2,6 +2,7 @@
 
 export(ers_column_info)
 export(ers_read_sharepoint)
+export(ers_sharepoint_path_clean)
 export(ers_table)
 export(ers_update_erstools)
 export(ers_write_sharepoint)

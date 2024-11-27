@@ -1,0 +1,137 @@
+---
+title: "TEST ERS_READ_SHAREPOINT 2.0"
+author: "Zach Friedman"
+date: "2024-11-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+root_folder_path_client_work <- "https://erstrategies1.sharepoint.com/sites/orgfiles/Client%20Work/District%20Partners/Portland/2022%20Resource%20Map/1.%20Data%20&%20Analysis%20-%20Secure/" 
+
+root_folder_path_external <- "https://erstrategies1.sharepoint.com/sites/external/Shared%20Documents/School%20System%20Partners/Portland%20Public%20Schools/PPS%202022%20Resource%20Map/Finance%20and%20HR%20FY23/" 
+
+root_folder_path_data_hub <- "https://erstrategies1.sharepoint.com/sites/ers-data/Shared%20Documents/District%20Data/Final%20Comp%20Data%20Tables/"
+
+ers_read_sharepoint_default_drive_name(folder_path = root_folder_path_client_work,
+                                       file_name_with_extension = "test_contacts_pq.csv")
+
+ers_read_sharepoint_default_drive_name(folder_path = root_folder_path_external,
+                                       file_name_with_extension = "2022%20All%20Vacancies.xlsx")
+
+ers_read_sharepoint_default_drive_name(folder_path = root_folder_path_data_hub,
+                                       file_name = "District%20Stats.xlsx")
+
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+
+```
+
+```{r}
+ers_sharepoint_path_clean <- function(full_path) {
+  drive_name <- case_when(
+    grepl("/orgfiles/Shared%20Documents/", full_path) ~ "internal_drive",
+    grepl("/orgfiles/Client%20Work/", full_path) ~ "client_work_drive",
+    grepl("/external/Shared%20Documents/", full_path) ~ "external_drive",
+    grepl("/ers-data/Shared%20Documents/", full_path) ~ "data_hub_drive",
+    TRUE ~ "client_work_drive" # Fallback for paths that don't match any pattern
+  )
+  pattern <- "(.*\\/orgfiles\\/Shared%20Documents\\/|.*\\/orgfiles\\/Client%20Work\\/|.*\\/external\\/Shared%20Documents\\/|.*\\/ers-data\\/Shared%20Documents\\/)"
+  path_first_part_removed <- sub(pattern, "", full_path)
+  path_clean <- gsub("%20", " ", path_first_part_removed)
+  path_clean <- gsub("\\/$", "", path_clean)
+  return(list(path_clean = path_clean, drive_name = drive_name))
+}
+
+```
+
+
+```{r}
+ers_read_sharepoint <- function(folder_path, file_name_with_extension, drive_name = "client_work_drive", 
+    sheet_name = NULL, skip_rows = 0, na_values = c("", "N/A", 
+        "NA", "Missing")) 
+{
+    file_name_with_extension <- gsub("%20", " ", file_name_with_extension) #remove %20s in file name if needed
+    # Clean folder path and extract drive_name if needed
+    cleaned <- ers_sharepoint_path_clean(folder_path)
+    folder_path <- cleaned$path_clean
+    
+    # Use drive_name from cleaned if not explicitly overridden
+    if (missing(drive_name)) {
+      drive_name <- cleaned$drive_name
+    }
+    orgfiles_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/orgfiles") %>% suppressMessages
+    external_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/external") %>% suppressMessages
+    data_hub_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/ers-data") %>% suppressMessages
+    
+    client_work_drive <- orgfiles_site$get_drive("Client Work")
+    internal_drive <- orgfiles_site$get_drive("Internal")
+    external_drive <- external_site$get_drive("Documents")
+    data_hub_drive <- data_hub_site$get_drive("Documents")
+    
+    if (drive_name == "client_work_drive") {
+        drive <- client_work_drive
+    }
+    else if (drive_name == "internal_drive") {
+        drive <- internal_drive
+    }
+    else if (drive_name == "external_drive") {
+        drive <- external_drive
+    }
+    else if (drive_name == "data_hub_drive") {
+        drive <- data_hub_drive
+    }
+    else {
+        stop("Invalid drive name. Use 'client_work_drive' or 'internal_drive'.")
+    }
+    
+    folder_item <- try(drive$get_item(folder_path), silent = TRUE)
+    if (inherits(folder_item, "try-error")) {
+        stop("Folder path does not exist: '", folder_path, "'")
+    }
+    
+    data_path <- file.path(folder_path, file_name_with_extension)
+    
+    file_item <- try(drive$get_item(data_path), silent = TRUE)
+    if (inherits(file_item, "try-error")) {
+        stop("File '", file_name_with_extension, "' does not exist in folder: '", 
+            folder_path, "'")
+    }
+    
+    file_extension <- paste0(".", tools::file_ext(file_name_with_extension))
+    
+    temp_file <- tempfile(fileext = file_extension)
+    drive$download_file(data_path, dest = temp_file)
+    
+    if (tools::file_ext(file_name_with_extension) == "csv") {
+        raw_data <- fread(temp_file, skip = skip_rows, na.strings = na_values)
+    }
+    else if (tools::file_ext(file_name_with_extension) %in% c("xls", 
+        "xlsx")) {
+        raw_data <- read_excel(temp_file, sheet = sheet_name, 
+            skip = skip_rows, na = na_values, guess_max = 5000)
+    }
+    else {
+        stop("Unsupported file format, only xls, xlsx, or csv: '", 
+            file_name_with_extension, "'")
+    }
+    return(raw_data)
+}
+```
+
+```{r}
+
+
+root_folder_path_client_work
+```
+
+
