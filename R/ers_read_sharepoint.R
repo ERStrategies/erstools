@@ -1,7 +1,7 @@
 #' Read files from internal sharepoint folders
 #'
 #'
-#' @param folder_path REQUIRED: The path to the file. This can be pasted directly from SharePoint: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r
+#' @param folder_path REQUIRED: The path to the file: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r
 #' @param file_name_with_extension REQUIRED: File name. Example: "student_performance.csv"
 #' @param sheet_name OPTIONAL: Only required if you have an excel spreadsheet with multiple sheets. Example: "Sheet 2"
 #' @param drive_name OPTIONAL: R will detect what drive the file is from (e.g. 'client_work_drive', 'internal_drive', 'external_drive', or 'data_hub_drive')
@@ -11,8 +11,8 @@
 #' @export
 #' @import Microsoft365R
 #' @import readxl
-#' @import data.table
-#' @import tidyverse
+#' @importFrom data.table fread
+#' @import dplyr
 ers_read_sharepoint <- function(folder_path,
                                 file_name_with_extension,
                                 sheet_name = NULL,
@@ -24,7 +24,7 @@ ers_read_sharepoint <- function(folder_path,
   file_name_with_extension <- gsub("%20", " ", file_name_with_extension)
 
   # Clean the folder path and extract the drive name from it if not explicitly provided
-  cleaned <- ers_sharepoint_path_clean(folder_path)
+  cleaned <- erstools::ers_sharepoint_path_clean(folder_path)
   folder_path <- cleaned$path_clean  # Cleaned folder path for SharePoint
 
   # If drive_name is not explicitly provided, use the drive_name extracted from the folder path

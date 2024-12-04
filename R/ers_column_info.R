@@ -5,8 +5,8 @@
 #' @param title OPTIONAL: Title of the table in quotes. Default: "Data Column Summary"
 #' @return Some basic validation checks on your data for all columns. Includes type, na and missing values, unique values, and more
 #' @export
-#' @import tidyverse
-#' @import stats
+#' @import dplyr
+#' @importFrom stats na.omit
 ers_column_info <- function(dataset, title = "Data Column Summary")
 {data.frame(
   Column_Name = names(dataset),

@@ -1,6 +1,6 @@
-library(erstools)
+# library(erstools)
 library(testthat)
-library(tidyverse)
+library(ggplot2)
 library(gt)
 test_that("ers_column_info runs successfully", {
   # Test data

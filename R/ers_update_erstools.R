@@ -38,5 +38,4 @@ ers_update_erstools <- function(pkg_name = "erstools", upgrade = "always") {
   }, error = function(e) {
     message("Error during installation: ", e$message)
   })
-  library(erstools)
 }

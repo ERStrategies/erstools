@@ -5,7 +5,7 @@
 #' @param title REQUIRED: Desired title of your data table. Example: "Teacher FTE by School"
 #' @return Your data as a nicely formatted table
 #' @export
-#' @import tidyverse
+#' @import dplyr
 #' @import gt
 ers_table <- function(dataset, title) {
 dataset %>%

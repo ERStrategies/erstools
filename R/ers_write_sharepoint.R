@@ -2,38 +2,57 @@
 #'
 #'
 #' @param data REQUIRED: The data frame to be uploaded
-#' @param folder_path REQUIRED: The folder where you want the data to be saved. Example: "District Partners/Yakima". Folder path must start with either "District Partners" or "Internal"
+#' @param folder_path REQUIRED: The folder where you want the data to be saved: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r
 #' @param file_name_with_extension REQUIRED: File name. Example: "student_performance.csv"
-#' @param drive_name OPTIONAL: By default it is set to client work, if you want to access something from internal, then change to internal_drive
+#' @param drive_name OPTIONAL: R will detect what drive the file is from (e.g. 'client_work_drive', or 'internal_drive')
 #' @return A message that your file was successfully uploaded.
 #' @export
 #' @import Microsoft365R
 #' @import writexl
-#' @import data.table
+#' @importFrom data.table fwrite
+#' @import dplyr
 ers_write_sharepoint <- function(data,
                                  folder_path,
                                  file_name_with_extension,
                                  drive_name = "client_work_drive") {
 
-    #set sharepoint site URL for access to our org-wide and external files
-  orgfiles_site_url <- "https://erstrategies1.sharepoint.com/sites/orgfiles"
-  #access sharepoint site URL you may be prompted to sign in here
-  orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
+  # Clean the folder path and extract the drive name from it if not explicitly provided
+  cleaned <- erstools::ers_sharepoint_path_clean(folder_path)
+  folder_path <- cleaned$path_clean  # Cleaned folder path for SharePoint
 
-  #see all folders in client work drive
+  # If drive_name is not explicitly provided, use the drive_name extracted from the folder path
+  if (missing(drive_name)) {
+    drive_name <- cleaned$drive_name
+  }
+
+  # Suppress messages while connecting to SharePoint sites
+  orgfiles_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/orgfiles") %>% suppressMessages
+  external_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/external") %>% suppressMessages
+  data_hub_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/ers-data") %>% suppressMessages
+
+  # Retrieve drives from each SharePoint site
   client_work_drive <- orgfiles_site$get_drive("Client Work")
-  #see all folders in internal work drive
   internal_drive <- orgfiles_site$get_drive("Internal")
+  external_drive <- external_site$get_drive("Documents")
+  data_hub_drive <- data_hub_site$get_drive("Documents")
 
-  # Determine which drive to use (client work by default)
+  # Determine which drive to use based on the drive_name parameter
   if (drive_name == "client_work_drive") {
     drive <- client_work_drive
-  } else if (drive_name == "internal_drive") {
-    drive <- internal_drive
-  } else {
-    stop("Invalid drive name. Use 'client_work_drive' or 'internal_drive'.")
   }
-  folder_path <- sub("^/|/$", "", folder_path)
+  else if (drive_name == "internal_drive") {
+    drive <- internal_drive
+  }
+  else if (drive_name == "external_drive") {
+    drive <- external_drive
+  }
+  else if (drive_name == "data_hub_drive") {
+    drive <- data_hub_drive
+  }
+  else {
+    # If the drive_name is invalid, stop and raise an error
+    stop("Invalid drive name. Use 'client_work_drive', 'internal_drive', 'external_drive', or 'data_hub_drive'.")
+  }
   # Check if the folder exists using get_item()
   folder_item <- try(drive$get_item(folder_path), silent = TRUE)
   if (inherits(folder_item, "try-error")) {
@@ -54,9 +73,23 @@ ers_write_sharepoint <- function(data,
     writexl::write_xlsx(data, temp_file)
   }
 
-  # Upload the file to the specified drive
-  drive$upload_file(temp_file, dest = data_path)
-
+  # Try to upload the file to the specified drive
+  tryCatch(
+    {
+      drive$upload_file(temp_file, dest = data_path)
+      message("Uploaded ", file_name_with_extension, " to: '", folder_path, "'")
+    },
+    error = function(e) {
+      error_message <- conditionMessage(e)
+      if (grepl("HTTP 423", error_message)) {
+        stop("The file is currently open or locked on SharePoint. Close the file and try again.")
+      } else if (grepl("HTTP 409", error_message)) {
+        stop("A previous upload attempt failed, and the file is locked. Try renaming the file and re-uploading.")
+      } else {
+        stop("An unexpected error occurred during file upload: ", error_message)
+      }
+    }
+  )
   # Return the path of the uploaded file
   return(paste0("Uploaded ", file_name_with_extension, " to: '", folder_path, "'"))
 }

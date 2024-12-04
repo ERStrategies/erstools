@@ -1,6 +1,6 @@
 Package: erstools
 Title: ERS RMarkdown Template and Functions to Read, Write, Validate, and Visualize Data
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: 
     person("Zach", "Friedman", , "zfriedman@erstrategies.org", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
@@ -15,10 +15,10 @@ Imports:
     readxl,
     writexl,
     gt,
-    tidyverse,
-    stats,
     devtools,
-    utils
+    utils,
+    dplyr
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    ggplot2
 Config/testthat/edition: 3

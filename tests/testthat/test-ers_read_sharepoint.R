@@ -1,6 +1,5 @@
-library(erstools)
 library(testthat)
-library(tidyverse)
+library(dplyr)
 folder_internal_clean <- "Core Services/Strategy & Innovation/Data Management & Strategy/DO NOT MOVE OR EDIT - Test data for R Scripts/erstools"
 folder_internal <- "https://erstrategies1.sharepoint.com/sites/orgfiles/Shared%20Documents/Core%20Services/Strategy%20&%20Innovation/Data%20Management%20&%20Strategy/DO%20NOT%20MOVE%20OR%20EDIT%20-%20Test%20data%20for%20R%20Scripts/erstools"
 folder_client_work <- "https://erstrategies1.sharepoint.com/sites/orgfiles/Client%20Work/District%20Partners/DSI_TESTING_ONLY"
@@ -52,7 +51,7 @@ test_that("Data Hub Drive: CSV file is downloaded from SharePoint", {
   # Test file name
   file_name <- "dummy_file_csv_standard.csv"  # Ensure this file exists in your test folder on SharePoint
   # Run the function to download and read the file
-  result <- ers_read_sharepoint(folder_data_hub, file_name, drive_name = "internal_drive")
+  result <- ers_read_sharepoint(folder_data_hub, file_name)
 
   # Check that the result is a data frame (i.e., file has been read successfully)
   expect_true(is.data.frame(result))
@@ -112,7 +111,7 @@ test_that("Error is raised when folder path does not exist", {
   folder_path <- "Invalid/NonExistentFolder"
 
   # Expect an error when trying to read from a non-existent folder path
-  expect_error(ers_read_sharepoint(folder_internal, file_name = "test.csv"),
+  expect_error(ers_read_sharepoint(folder_path, file_name = "test.csv"),
                regexp = "Folder path does not exist")
 })
 
@@ -131,6 +130,6 @@ test_that("Error is raised when unsupported file format is provided", {
 
   # Expect an error when trying to read a file with unsupported format
   expect_error(ers_read_sharepoint(folder_internal, file_name),
-               "Unsupported file format, only xls, xlsx, or csv")
+               regexp = "Unsupported file format. Supported formats are xls, xlsx, or csv: .*")
 })
 

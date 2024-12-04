@@ -1,6 +1,6 @@
-library(erstools)
+# library(erstools)
 library(testthat)
-library(tidyverse)
+library(dplyr)
 library(gt)
 
 test_that("ers_table creates a gt table with correct formatting", {

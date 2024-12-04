@@ -4,7 +4,7 @@
 #' @param full_path REQUIRED: The path to the file. This can be pasted directly from SharePoint: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r
 #' @return Your cleaned sharepoint path and the sharepoint drive name
 #' @export
-#' @import tidyverse
+#' @import dplyr
 ers_sharepoint_path_clean <- function(full_path) {
   drive_name <- case_when(
     grepl("/orgfiles/Shared%20Documents/", full_path) ~ "internal_drive",

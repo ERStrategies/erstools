@@ -14,11 +14,11 @@ ers_write_sharepoint(
 \arguments{
 \item{data}{REQUIRED: The data frame to be uploaded}
 
-\item{folder_path}{REQUIRED: The folder where you want the data to be saved. Example: "District Partners/Yakima". Folder path must start with either "District Partners" or "Internal"}
+\item{folder_path}{REQUIRED: The folder where you want the data to be saved: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r}
 
 \item{file_name_with_extension}{REQUIRED: File name. Example: "student_performance.csv"}
 
-\item{drive_name}{OPTIONAL: By default it is set to client work, if you want to access something from internal, then change to internal_drive}
+\item{drive_name}{OPTIONAL: R will detect what drive the file is from (e.g. 'client_work_drive', or 'internal_drive')}
 }
 \value{
 A message that your file was successfully uploaded.

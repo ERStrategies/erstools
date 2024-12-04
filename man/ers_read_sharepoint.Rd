@@ -14,7 +14,7 @@ ers_read_sharepoint(
 )
 }
 \arguments{
-\item{folder_path}{REQUIRED: The path to the file. This can be pasted directly from SharePoint: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r}
+\item{folder_path}{REQUIRED: The path to the file: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r}
 
 \item{file_name_with_extension}{REQUIRED: File name. Example: "student_performance.csv"}
 
