@@ -10,7 +10,7 @@ ers_read_sharepoint(
   sheet_name = NULL,
   drive_name = "client_work_drive",
   skip_rows = 0,
-  na_values = c("", "N/A", "NA", "Missing")
+  na_values = c("")
 )
 }
 \arguments{

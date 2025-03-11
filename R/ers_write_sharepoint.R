@@ -1,7 +1,7 @@
 #' Write files to internal sharepoint folders
 #'
 #'
-#' @param data REQUIRED: The data frame to be uploaded
+#' @param data REQUIRED: The data frame, shape file, or ggplot object to be uploaded
 #' @param folder_path REQUIRED: The folder where you want the data to be saved: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r
 #' @param file_name_with_extension REQUIRED: File name. Example: "student_performance.csv"
 #' @param drive_name OPTIONAL: R will detect what drive the file is from (e.g. 'client_work_drive', or 'internal_drive')
@@ -10,6 +10,8 @@
 #' @import Microsoft365R
 #' @import writexl
 #' @importFrom data.table fwrite
+#' @importFrom sf st_write
+#' @importFrom ggplot2 ggsave
 #' @import dplyr
 ers_write_sharepoint <- function(data,
                                  folder_path,
@@ -60,17 +62,23 @@ ers_write_sharepoint <- function(data,
   }
 
     # Construct the full data path
-  file_extension <- ifelse(tools::file_ext(file_name_with_extension) == "csv", ".csv", ".xlsx")
+  file_extension <- tools::file_ext(file_name_with_extension)
   data_path <- file.path(folder_path, file_name_with_extension)
 
   # Create a temporary file to store the data
-  temp_file <- tempfile(fileext = file_extension)
+  temp_file <- tempfile(fileext = paste0(".", file_extension))
 
   # Write the data to the temporary file based on the file type
-  if (file_extension == ".csv") {
+  if (file_extension == "csv") {
     fwrite(data, temp_file, row.names = FALSE, dateTimeAs = "write.csv")
-  } else {
+  } else if (file_extension == "xlsx") {
     writexl::write_xlsx(data, temp_file)
+  } else if (file_extension == "shp") {
+    sf::st_write(data, temp_file, delete_dsn = TRUE)
+  } else if (file_extension == "png") {
+    ggsave(temp_file, plot = data, device = "png")
+  } else {
+    stop("Unsupported file type: ", file_extension)
   }
 
   # Try to upload the file to the specified drive

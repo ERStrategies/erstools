@@ -13,12 +13,13 @@
 #' @import readxl
 #' @importFrom data.table fread
 #' @import dplyr
+#' @importFrom sf st_read
 ers_read_sharepoint <- function(folder_path,
                                 file_name_with_extension,
                                 sheet_name = NULL,
                                 drive_name = "client_work_drive",
                                 skip_rows = 0,
-                                na_values = c("", "N/A", "NA", "Missing"))
+                                na_values = c(""))
 {
   # Replace '%20' in the file name with spaces to clean the file name
   file_name_with_extension <- gsub("%20", " ", file_name_with_extension)
@@ -96,11 +97,15 @@ ers_read_sharepoint <- function(folder_path,
   else if (tools::file_ext(file_name_with_extension) %in% c("xls", "xlsx")) {
     # For Excel files, use `read_excel` with the specified sheet name, skip rows, and NA values
     raw_data <- read_excel(temp_file, sheet = sheet_name,
-                           skip = skip_rows, na = na_values, guess_max = 5000)
+                           skip = skip_rows, na = na_values, guess_max = 50000)
+  }
+  else if (tools::file_ext(file_name_with_extension) == "shp") {
+    # For shapefiles, use `st_read`
+    raw_data <- st_read(temp_file)
   }
   else {
     # Stop execution for unsupported file formats
-    stop("Unsupported file format. Supported formats are xls, xlsx, or csv: '",
+    stop("Unsupported file format. Supported formats are xls, xlsx, csv, or shp: '",
          file_name_with_extension, "'")
   }
 

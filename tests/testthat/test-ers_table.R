@@ -1,11 +1,10 @@
-# library(erstools)
 library(testthat)
 library(dplyr)
 library(gt)
 
 test_that("ers_table creates a gt table with correct formatting", {
   # Test data
-  data <- diamonds %>% head()
+  data <- ggplot2::diamonds %>% head()
 
   # Run the function
   table_output <- ers_table(data, "diamond stuff")

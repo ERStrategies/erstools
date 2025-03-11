@@ -12,7 +12,7 @@ ers_write_sharepoint(
 )
 }
 \arguments{
-\item{data}{REQUIRED: The data frame to be uploaded}
+\item{data}{REQUIRED: The data frame, shape file, or ggplot object to be uploaded}
 
 \item{folder_path}{REQUIRED: The folder where you want the data to be saved: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r}
 

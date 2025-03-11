@@ -7,8 +7,9 @@
 #' @export
 #' @import dplyr
 #' @import gt
-ers_table <- function(dataset, title) {
+ers_table <- function(dataset, title = "Default Title") {
 dataset %>%
+  ungroup %>%
   gt() %>%
   tab_header(title) %>%
   opt_stylize(style = 3) %>%

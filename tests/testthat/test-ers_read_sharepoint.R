@@ -130,6 +130,6 @@ test_that("Error is raised when unsupported file format is provided", {
 
   # Expect an error when trying to read a file with unsupported format
   expect_error(ers_read_sharepoint(folder_internal, file_name),
-               regexp = "Unsupported file format. Supported formats are xls, xlsx, or csv: .*")
+               regexp = "Unsupported file format. Supported formats are.*")
 })
 

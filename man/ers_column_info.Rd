@@ -2,18 +2,18 @@
 % Please edit documentation in R/ers_column_info.R
 \name{ers_column_info}
 \alias{ers_column_info}
-\title{Output your data as a nicely formatted table using the gt package}
+\title{Use the skim function to validate your data and output a summary of your columns}
 \usage{
-ers_column_info(dataset, title = "Data Column Summary")
+ers_column_info(dataset)
 }
 \arguments{
-\item{dataset}{REQUIRED: The data that you want to make into a table}
-
-\item{title}{OPTIONAL: Title of the table in quotes. Default: "Data Column Summary"}
+\item{dataset}{A data frame or tibble to be summarized.}
 }
 \value{
-Some basic validation checks on your data for all columns. Includes type, na and missing values, unique values, and more
+A tibble with summary statistics, where numeric values are rounded to one decimal place
+and large numbers (≥ 1,000) are formatted with commas.
 }
 \description{
-Output your data as a nicely formatted table using the gt package
+This function applies \code{skimr::skim()} to summarize a dataset and then formats numeric columns.
+Numeric values are rounded to one decimal place. If a number is 1,000 or greater, it is formatted with commas.
 }

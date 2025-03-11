@@ -4,7 +4,7 @@
 \alias{ers_table}
 \title{Output your data as a nicely formatted table using the gt package}
 \usage{
-ers_table(dataset, title)
+ers_table(dataset, title = "Default Title")
 }
 \arguments{
 \item{dataset}{REQUIRED: The data that you want to make into a table}
