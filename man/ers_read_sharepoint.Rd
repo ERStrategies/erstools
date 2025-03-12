@@ -2,7 +2,7 @@
 % Please edit documentation in R/ers_read_sharepoint.R
 \name{ers_read_sharepoint}
 \alias{ers_read_sharepoint}
-\title{Read files from internal sharepoint folders}
+\title{Read files from sharepoint}
 \usage{
 ers_read_sharepoint(
   folder_path,
@@ -16,7 +16,7 @@ ers_read_sharepoint(
 \arguments{
 \item{folder_path}{REQUIRED: The path to the file: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r}
 
-\item{file_name_with_extension}{REQUIRED: File name. Example: "student_performance.csv"}
+\item{file_name_with_extension}{REQUIRED: Supported extensions: .csv, .xls, .xlsx, .shp Example: "student_performance.csv"}
 
 \item{sheet_name}{OPTIONAL: Only required if you have an excel spreadsheet with multiple sheets. Example: "Sheet 2"}
 
@@ -30,5 +30,5 @@ ers_read_sharepoint(
 Your loaded data as a data frame with the name raw_data
 }
 \description{
-Read files from internal sharepoint folders
+Read files from sharepoint
 }

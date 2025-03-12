@@ -172,4 +172,26 @@ test_that("Error is raised when folder path does not exist", {
                "Folder path does not exist")
 })
 
+library(ggplot2)
+library(sf)
+
+test_that("Internal: PNG file is uploaded successfully", {
+
+  # Define file name
+  file_name <- "test_plot.png"
+  folder_path <- folder_internal
+  folder_path_clean <- ers_sharepoint_path_clean(folder_path)[[1]]
+
+  # Create a simple ggplot and save it using ers_write_sharepoint
+  sample_plot <- ggplot(sample_data, aes(x = School, y = Enrollment)) +
+    geom_col()
+
+  result <- ers_write_sharepoint(sample_plot, folder_path, file_name)
+
+  # Check that the result confirms successful upload
+  expect_equal(result, paste0("Uploaded ", file_name, " to: '", folder_path_clean, "'"))
+
+  # Cleanup after the test
+  cleanup_sharepoint_files(folder_path, file_name)
+})
 

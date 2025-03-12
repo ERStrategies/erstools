@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## 0.2 Read All Libraries
 
 ```{r}
-ers_load_packages()
+erstools::ers_load_packages()
 options(scipen = 99) #prevent any numbers from showing up as scientific notation
 ```
 

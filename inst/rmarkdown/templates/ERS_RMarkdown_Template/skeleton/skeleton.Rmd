@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Part 0: Read Libraries and connect to Sharepoint
 
 ```{r}
-ers_load_packages()
+erstools::ers_load_packages()
 options(scipen = 99) #prevent any numbers from showing up as scientific notation
 ```
 

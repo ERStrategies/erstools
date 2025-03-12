@@ -2,7 +2,7 @@
 % Please edit documentation in R/ers_write_sharepoint.R
 \name{ers_write_sharepoint}
 \alias{ers_write_sharepoint}
-\title{Write files to internal sharepoint folders}
+\title{Write files to sharepoint folders}
 \usage{
 ers_write_sharepoint(
   data,
@@ -16,7 +16,7 @@ ers_write_sharepoint(
 
 \item{folder_path}{REQUIRED: The folder where you want the data to be saved: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r}
 
-\item{file_name_with_extension}{REQUIRED: File name. Example: "student_performance.csv"}
+\item{file_name_with_extension}{REQUIRED: Supported extensions: .csv, .xlsx, .png(ggsave). Example: "student_performance.csv"}
 
 \item{drive_name}{OPTIONAL: R will detect what drive the file is from (e.g. 'client_work_drive', or 'internal_drive')}
 }
@@ -24,5 +24,5 @@ ers_write_sharepoint(
 A message that your file was successfully uploaded.
 }
 \description{
-Write files to internal sharepoint folders
+Write files to sharepoint folders
 }

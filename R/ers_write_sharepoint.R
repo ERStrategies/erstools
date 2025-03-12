@@ -1,9 +1,9 @@
-#' Write files to internal sharepoint folders
+#' Write files to sharepoint folders
 #'
 #'
 #' @param data REQUIRED: The data frame, shape file, or ggplot object to be uploaded
 #' @param folder_path REQUIRED: The folder where you want the data to be saved: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r
-#' @param file_name_with_extension REQUIRED: File name. Example: "student_performance.csv"
+#' @param file_name_with_extension REQUIRED: Supported extensions: .csv, .xlsx, .png(ggsave). Example: "student_performance.csv"
 #' @param drive_name OPTIONAL: R will detect what drive the file is from (e.g. 'client_work_drive', or 'internal_drive')
 #' @return A message that your file was successfully uploaded.
 #' @export
@@ -73,8 +73,6 @@ ers_write_sharepoint <- function(data,
     fwrite(data, temp_file, row.names = FALSE, dateTimeAs = "write.csv")
   } else if (file_extension == "xlsx") {
     writexl::write_xlsx(data, temp_file)
-  } else if (file_extension == "shp") {
-    sf::st_write(data, temp_file, delete_dsn = TRUE)
   } else if (file_extension == "png") {
     ggsave(temp_file, plot = data, device = "png")
   } else {

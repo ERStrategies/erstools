@@ -133,3 +133,17 @@ test_that("Error is raised when unsupported file format is provided", {
                regexp = "Unsupported file format. Supported formats are.*")
 })
 
+test_that("Internal Drive: Shapefile is downloaded from SharePoint", {
+  # Define the file on SharePoint
+  file_name <- "Current_Districts_2025.shp"  # Ensure this file exists in your test folder on SharePoint
+
+  # Run the function to download and read the shapefile
+  result <- ers_read_sharepoint(folder_internal, file_name)
+
+  # Check that the result is an sf object (i.e., file has been read successfully)
+  expect_s3_class(result, "sf")
+
+  # Optionally, check that the file contains spatial data
+  expect_gt(nrow(result), 0)  # The file should have at least one feature
+})
+
