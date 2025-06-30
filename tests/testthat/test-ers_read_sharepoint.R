@@ -1,7 +1,7 @@
 library(testthat)
 library(dplyr)
-folder_internal_clean <- "Core Services/Strategy & Innovation/Data Management & Strategy/DO NOT MOVE OR EDIT - Test data for R Scripts/erstools"
-folder_internal <- "https://erstrategies1.sharepoint.com/sites/orgfiles/Shared%20Documents/Core%20Services/Strategy%20&%20Innovation/Data%20Management%20&%20Strategy/DO%20NOT%20MOVE%20OR%20EDIT%20-%20Test%20data%20for%20R%20Scripts/erstools"
+folder_internal_clean <- "Core Services/Strategy & Innovation/Data Strategy & Innovation/DO NOT MOVE OR EDIT - Test data for R Scripts/erstools"
+folder_internal <- "https://erstrategies1.sharepoint.com/sites/orgfiles/Shared%20Documents/Core%20Services/Strategy%20&%20Innovation/Data%20Strategy%20&%20Innovation/DO%20NOT%20MOVE%20OR%20EDIT%20-%20Test%20data%20for%20R%20Scripts/erstools"
 folder_client_work <- "https://erstrategies1.sharepoint.com/sites/orgfiles/Client%20Work/District%20Partners/DSI_TESTING_ONLY"
 folder_external <- "https://erstrategies1.sharepoint.com/sites/external/Shared%20Documents/School%20System%20Partners/DSI_TESTING_ONLY"
 folder_data_hub <- "https://erstrategies1.sharepoint.com/sites/ers-data/Shared%20Documents/District%20Data/Final%20Comp%20Data%20Tables/DSI_TESTING_ONLY"
