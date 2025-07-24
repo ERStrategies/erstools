@@ -1,9 +1,13 @@
 Package: erstools
 Title: ERS RMarkdown Template and Functions to Read, Write, Validate, and Visualize Data
-Version: 1.1.1
-Authors@R: 
-    person("Zach", "Friedman", , "zfriedman@erstrategies.org", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+Version: 1.1.1.1
+Authors@R: c(
+    person("Zach", "Friedman", email = "zfriedman@erstrategies.org", 
+           role = c("aut", "cre"), 
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+    person("Tommy", "Bellaire", email = "rtbellaire@erstrategies.org", 
+           role = "aut", 
+           comment = c(ORCID = "0009-0006-1075-3155")))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -18,7 +22,8 @@ Imports:
     devtools,
     utils,
     dplyr,
-    ggplot2, 
+    ggplot2,
+    janitor,
     scales, 
     sf, 
     skimr

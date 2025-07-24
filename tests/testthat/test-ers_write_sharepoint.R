@@ -7,7 +7,7 @@ folder_external <- "https://erstrategies1.sharepoint.com/sites/external/Shared%2
 folder_data_hub <- "https://erstrategies1.sharepoint.com/sites/ers-data/Shared%20Documents/District%20Data/Final%20Comp%20Data%20Tables/DSI_TESTING_ONLY"
 
 # Create a sample data frame
-sample_data <- data.frame(Enrollment = c(100, 200, 300), School = c("A", "B", "C"))
+sample_data <- data.frame(enrollment = c(100, 200, 300), school = c("A", "B", "C"))
 
 # Function to clean up test files after running tests
 cleanup_sharepoint_files <- function(folder_path, file_name) {
@@ -53,7 +53,7 @@ cleanup_sharepoint_files <- function(folder_path, file_name) {
 test_that("NO CLEANING Client Work: CSV file is uploaded successfully", {
 
   # Define file name
-  file_name <- "test_enrollment_data.csv"
+  file_name <- "test_enrollment_data_v1.csv"
   folder_path <- folder_client_work_clean
   # Run the function to write the data to SharePoint
   result <- ers_write_sharepoint(sample_data, folder_path, file_name)
@@ -84,7 +84,7 @@ test_that("Internal: CSV file is uploaded successfully", {
 test_that("Client Work: CSV file is uploaded successfully", {
 
   # Define file name
-  file_name <- "test_enrollment_data.csv"
+  file_name <- "test_enrollment_data_v2.csv"
   folder_path <- folder_client_work
   folder_path_clean <- ers_sharepoint_path_clean(folder_path)[[1]]
   # Run the function to write the data to SharePoint
@@ -183,7 +183,7 @@ test_that("Internal: PNG file is uploaded successfully", {
   folder_path_clean <- ers_sharepoint_path_clean(folder_path)[[1]]
 
   # Create a simple ggplot and save it using ers_write_sharepoint
-  sample_plot <- ggplot(sample_data, aes(x = School, y = Enrollment)) +
+  sample_plot <- ggplot(sample_data, aes(x = school, y = enrollment)) +
     geom_col()
 
   result <- ers_write_sharepoint(sample_plot, folder_path, file_name)

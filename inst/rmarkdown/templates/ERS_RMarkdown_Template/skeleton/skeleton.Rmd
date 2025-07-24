@@ -38,7 +38,7 @@ orgfiles_site <- get_sharepoint_site(site_url = orgfiles_site_url)
 ```{r}
 raw_data_folder_path <- "https://erstrategies1.sharepoint.com/sites/orgfiles/Client%20Work/District%20Partners/Columbus%20City/22-23%20Financial%20Equity%20&%20Funding%20System%20Design/1.%20Data%20&%20Analysis%20-%20Secure/Raw%20Data%20for%20R"
 
-raw_data <- ers_read_sharepoint(folder_path = raw_data_folder_path,
+raw_data <- ers_read_clean(folder_path = raw_data_folder_path,
                    file_name_with_extension = "XXX.XXX")
 ```
 

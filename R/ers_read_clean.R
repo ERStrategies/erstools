@@ -1,8 +1,8 @@
-#' Read files from sharepoint
+#' Read files from sharepoint with clean names
 #'
 #'
 #' @param folder_path REQUIRED: The path to the file: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r
-#' @param file_name_with_extension REQUIRED: Supported extensions: .csv, .xls, .xlsx, .shp Example: "student_performance.csv"
+#' @param file_name_with_extension REQUIRED: Supported extensions: .csv, .xls, .xlsx. Example: "student_performance.csv"
 #' @param sheet_name OPTIONAL: Only required if you have an excel spreadsheet with multiple sheets. Example: "Sheet 2"
 #' @param drive_name OPTIONAL: R will detect what drive the file is from (e.g. 'client_work_drive', 'internal_drive', 'external_drive', or 'data_hub_drive')
 #' @param skip_rows OPTIONAL: Only required if your data doesn't start in the first row of the spreadsheet. Example: If your data starts in row 4 then enter 3
@@ -16,13 +16,13 @@
 #' @import dplyr
 #' @importFrom sf st_read
 #' @importFrom janitor clean_names
-ers_read_sharepoint <- function(folder_path,
+ers_read_clean <- function(folder_path,
                                 file_name_with_extension,
                                 sheet_name = NULL,
                                 drive_name = "client_work_drive",
                                 skip_rows = 0,
                                 na_values = c(""),
-                                clean_names = "FALSE")
+                                clean_names = "TRUE")
 {
   # Replace '%20' in the file name with spaces to clean the file name
   file_name_with_extension <- gsub("%20", " ", file_name_with_extension)
@@ -102,29 +102,14 @@ ers_read_sharepoint <- function(folder_path,
     raw_data <- read_excel(temp_file, sheet = sheet_name,
                            skip = skip_rows, na = na_values, guess_max = 100000)
   }
-  else if (tools::file_ext(file_name_with_extension) == "shp") {
-    # Create a temporary directory
-    temp_dir <- tempdir()
-    # Define possible extensions
-    shp_components <- c("shp", "shx", "dbf", "prj", "cpg")
-
-    # Download each component
-    for (ext in shp_components) {
-      file_path <- file.path(temp_dir, paste0(tools::file_path_sans_ext(file_name_with_extension), ".", ext))
-      drive$download_file(file.path(folder_path, paste0(tools::file_path_sans_ext(file_name_with_extension), ".", ext)), dest = file_path)
-    }
-
-    # Read the shapefile
-    raw_data <- st_read(file.path(temp_dir, paste0(tools::file_path_sans_ext(file_name_with_extension), ".shp")))
-  }
   else {
     # Stop execution for unsupported file formats
-    stop("Unsupported file format. Supported formats are xls, xlsx, csv, or shp: '",
+    stop("Unsupported file format. Supported formats are xls, xlsx, csv: '",
          file_name_with_extension, "'")
   }
 
   # Check if clean_names is TRUE and file name does NOT contain ".shp"
-  if (clean_names == "TRUE" && !grepl("\\.shp$",
+  if (clean_names == TRUE && !grepl("\\.shp$",
                                     file_name_with_extension,
                                     ignore.case = TRUE)) {
     raw_data <- raw_data %>%
