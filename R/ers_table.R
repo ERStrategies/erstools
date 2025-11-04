@@ -17,7 +17,7 @@ ers_table <- function(dataset, title = "Default Title") {
   # Display message if dataset has more than 50 rows
   if (n_rows > 50) {
     message(sprintf("Note: The dataset has %d rows. Only the first 50 rows will be displayed in the table.", n_rows))
-    dataset <- dataset %>% head(50)
+    dataset <- dataset %>% slice_head(n = 50)
   }
   
   dataset %>%
