@@ -12,8 +12,13 @@ ers_table(dataset, title = "Default Title")
 \item{title}{REQUIRED: Desired title of your data table. Example: "Teacher FTE by School"}
 }
 \value{
-Your data as a nicely formatted table
+Your data as a nicely formatted table (limited to 50 rows)
 }
 \description{
 Output your data as a nicely formatted table using the gt package
+}
+\details{
+This function creates a formatted table from your data. Tables are limited
+to a maximum of 50 rows. If the input dataset has more than 50 rows, only
+the first 50 rows will be displayed and a message will be shown.
 }
