@@ -17,7 +17,7 @@ ers_read_clean(
 \arguments{
 \item{folder_path}{REQUIRED: The path to the file: https://app.tettra.co/teams/ersknowledge/pages/copying-a-folder-path-from-sharepoint-to-use-in-r}
 
-\item{file_name_with_extension}{REQUIRED: Supported extensions: .csv, .xls, .xlsx, .shp Example: "student_performance.csv"}
+\item{file_name_with_extension}{REQUIRED: Supported extensions: .csv, .xls, .xlsx. Example: "student_performance.csv"}
 
 \item{sheet_name}{OPTIONAL: Only required if you have an excel spreadsheet with multiple sheets. Example: "Sheet 2"}
 

@@ -1,10 +1,9 @@
 Package: erstools
 Title: ERS RMarkdown Template and Functions to Read, Write, Validate, and Visualize Data
-Version: 1.1.1.1
+Version: 1.1.2
 Authors@R: c(
     person("Zach", "Friedman", email = "zfriedman@erstrategies.org", 
-           role = c("aut", "cre"), 
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           role = c("aut", "cre")),
     person("Tommy", "Bellaire", email = "rtbellaire@erstrategies.org", 
            role = "aut", 
            comment = c(ORCID = "0009-0006-1075-3155")))
@@ -12,7 +11,7 @@ Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports:
     Microsoft365R,
     data.table,
@@ -20,10 +19,10 @@ Imports:
     writexl,
     gt,
     devtools,
-    utils,
     dplyr,
     ggplot2,
     janitor,
+    rmarkdown,
     scales, 
     sf, 
     skimr

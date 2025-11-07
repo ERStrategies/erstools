@@ -2,18 +2,13 @@
 % Please edit documentation in R/ers_update_erstools.R
 \name{ers_update_erstools}
 \alias{ers_update_erstools}
-\title{Update the erstools package}
+\title{Update the erstools package from GitHub}
 \usage{
-ers_update_erstools(pkg_name = "erstools", upgrade = "always")
-}
-\arguments{
-\item{pkg_name}{OPTIONAL: The private github package you want to install. Currently only supports erstools.}
-
-\item{upgrade}{OPTIONAL: By default it installs all other necessary packages. It will give warnings if some of them failed.}
+ers_update_erstools()
 }
 \value{
-Nothing. Your package will be installed
+Invisibly returns TRUE if installation succeeds.
 }
 \description{
-Update the erstools package
+Installs or updates the public erstools package from GitHub.
 }

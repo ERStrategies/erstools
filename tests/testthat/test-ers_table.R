@@ -12,3 +12,11 @@ test_that("ers_table creates a gt table with correct formatting", {
   # Test if the output is a gt table
   expect_s3_class(table_output, "gt_tbl")
 })
+
+test_that("ers_table errors if more than 50 rows", {
+  data <- ggplot2::diamonds %>% head(51)
+  expect_error(
+    ers_table(data, "Too many rows"),
+    "ers_table only supports tables with 50 rows or fewer"
+  )
+})

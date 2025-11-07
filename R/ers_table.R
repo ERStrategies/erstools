@@ -8,15 +8,26 @@
 #' @import dplyr
 #' @import gt
 ers_table <- function(dataset, title = "Default Title") {
-dataset %>%
-  ungroup %>%
-  gt() %>%
-  tab_header(title) %>%
-  opt_stylize(style = 3) %>%
-  tab_style(style = cell_text(align = "left",
-                              weight = "bold",
-                              size = "x-large"),
-            locations = cells_title("title")) %>%
-  tab_style(style = cell_text(weight = "bold"),
-            locations = cells_column_labels())
+  if (nrow(dataset) > 50) {
+    stop(
+      paste0(
+        "ers_table only supports tables with 50 rows or fewer. Your table has ",
+        nrow(dataset),
+        " rows. Consider filtering or summarizing your data before displaying it."
+      )
+    )
+  }
+  dataset %>%
+    ungroup %>%
+    gt() %>%
+    tab_header(title) %>%
+    opt_stylize(style = 3) %>%
+    tab_style(
+      style = cell_text(align = "left", weight = "bold", size = "x-large"),
+      locations = cells_title("title")
+    ) %>%
+    tab_style(
+      style = cell_text(weight = "bold"),
+      locations = cells_column_labels()
+    )
 }
