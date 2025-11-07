@@ -11,6 +11,7 @@
 #' ers_load_packages()
 ers_load_packages <- function() {
   # Categorized list of packages with descriptions
+  # Added: glue, httr, jsonlite, magrittr
   libraries <- list(
     "Load Data" = list(
       "Microsoft365R" = "Connects to SharePoint and loads files",
@@ -24,7 +25,12 @@ ers_load_packages <- function() {
       "data.table" = "Fast CSV reading and data manipulation",
       "janitor" = "Cleans and formats column names",
       "safejoin" = "Safer join operations for 1:many matching",
-      "stringr" = "String manipulation with regex support"
+      "stringr" = "String manipulation with regex support",
+      "glue" = "String interpolation and templating"
+    ),
+    "APIs & Web" = list(
+      "httr" = "Tools for working with URLs and HTTP",
+      "jsonlite" = "Read and write JSON data"
     ),
     "Format & Display Data" = list(
       "scales" = "Formats numbers and axes in plots",
@@ -40,7 +46,6 @@ ers_load_packages <- function() {
       "erstools" = "Custom package with functions for SharePoint and table formatting"
     )
   )
-
   # Initialize storage for messages
   output_messages <- c()
   missing_packages <- c()
@@ -51,23 +56,47 @@ ers_load_packages <- function() {
 
     for (pkg in names(libraries[[category]])) {
       if (!requireNamespace(pkg, quietly = TRUE)) {
-        missing_packages <- c(missing_packages, sprintf("Package '%s' is missing. Install it using: install.packages('%s')", pkg, pkg))
+        missing_packages <- c(
+          missing_packages,
+          sprintf(
+            "Package '%s' is missing. Install it using: install.packages('%s')",
+            pkg,
+            pkg
+          )
+        )
       } else {
-        suppressPackageStartupMessages(suppressMessages(library(pkg, character.only = TRUE)))
-        category_messages <- c(category_messages, sprintf("- %s: %s", pkg, libraries[[category]][[pkg]]))
+        suppressPackageStartupMessages(suppressMessages(library(
+          pkg,
+          character.only = TRUE
+        )))
+        category_messages <- c(
+          category_messages,
+          sprintf("- %s: %s", pkg, libraries[[category]][[pkg]])
+        )
       }
     }
 
     if (length(category_messages) > 0) {
-      output_messages <- c(output_messages, sprintf("\n **%s**:\n%s", category, paste(category_messages, collapse = "\n")))
+      output_messages <- c(
+        output_messages,
+        sprintf(
+          "\n **%s**:\n%s",
+          category,
+          paste(category_messages, collapse = "\n")
+        )
+      )
     }
+  }
+
+  # Print missing package warnings at the top
+  if (length(missing_packages) > 0) {
+    cat(
+      "\n **Missing Packages:**\n",
+      paste(missing_packages, collapse = "\n"),
+      "\n"
+    )
   }
 
   # Print categorized package loading summary
   cat("\n Loaded Libraries:\n", paste(output_messages, collapse = "\n"), "\n")
-
-  # Print missing package warnings at the bottom
-  if (length(missing_packages) > 0) {
-    cat("\n **Missing Packages:**\n", paste(missing_packages, collapse = "\n"), "\n")
-  }
 }

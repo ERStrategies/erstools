@@ -16,20 +16,21 @@
 #' @import dplyr
 #' @importFrom sf st_read
 #' @importFrom janitor clean_names
-ers_read_clean <- function(folder_path,
-                                file_name_with_extension,
-                                sheet_name = NULL,
-                                drive_name = "client_work_drive",
-                                skip_rows = 0,
-                                na_values = c(""),
-                                clean_names = "TRUE")
-{
+ers_read_clean <- function(
+  folder_path,
+  file_name_with_extension,
+  sheet_name = NULL,
+  drive_name = "client_work_drive",
+  skip_rows = 0,
+  na_values = c(""),
+  clean_names = TRUE
+) {
   # Replace '%20' in the file name with spaces to clean the file name
   file_name_with_extension <- gsub("%20", " ", file_name_with_extension)
 
   # Clean the folder path and extract the drive name from it if not explicitly provided
   cleaned <- erstools::ers_sharepoint_path_clean(folder_path)
-  folder_path <- cleaned$path_clean  # Cleaned folder path for SharePoint
+  folder_path <- cleaned$path_clean # Cleaned folder path for SharePoint
 
   # If drive_name is not explicitly provided, use the drive_name extracted from the folder path
   if (missing(drive_name)) {
@@ -37,9 +38,18 @@ ers_read_clean <- function(folder_path,
   }
 
   # Suppress messages while connecting to SharePoint sites
-  orgfiles_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/orgfiles") %>% suppressMessages
-  external_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/external") %>% suppressMessages
-  data_hub_site <- get_sharepoint_site(site_url = "https://erstrategies1.sharepoint.com/sites/ers-data") %>% suppressMessages
+  orgfiles_site <- get_sharepoint_site(
+    site_url = "https://erstrategies1.sharepoint.com/sites/orgfiles"
+  ) %>%
+    suppressMessages
+  external_site <- get_sharepoint_site(
+    site_url = "https://erstrategies1.sharepoint.com/sites/external"
+  ) %>%
+    suppressMessages
+  data_hub_site <- get_sharepoint_site(
+    site_url = "https://erstrategies1.sharepoint.com/sites/ers-data"
+  ) %>%
+    suppressMessages
 
   # Retrieve drives from each SharePoint site
   client_work_drive <- orgfiles_site$get_drive("Client Work")
@@ -50,19 +60,17 @@ ers_read_clean <- function(folder_path,
   # Determine which drive to use based on the drive_name parameter
   if (drive_name == "client_work_drive") {
     drive <- client_work_drive
-  }
-  else if (drive_name == "internal_drive") {
+  } else if (drive_name == "internal_drive") {
     drive <- internal_drive
-  }
-  else if (drive_name == "external_drive") {
+  } else if (drive_name == "external_drive") {
     drive <- external_drive
-  }
-  else if (drive_name == "data_hub_drive") {
+  } else if (drive_name == "data_hub_drive") {
     drive <- data_hub_drive
-  }
-  else {
+  } else {
     # If the drive_name is invalid, stop and raise an error
-    stop("Invalid drive name. Use 'client_work_drive', 'internal_drive', 'external_drive', or 'data_hub_drive'.")
+    stop(
+      "Invalid drive name. Use 'client_work_drive', 'internal_drive', 'external_drive', or 'data_hub_drive'."
+    )
   }
 
   # Try to get the folder item from the drive
@@ -79,8 +87,13 @@ ers_read_clean <- function(folder_path,
   file_item <- try(drive$get_item(data_path), silent = TRUE)
   if (inherits(file_item, "try-error")) {
     # Stop execution if the file does not exist
-    stop("File '", file_name_with_extension, "' does not exist in folder: '",
-         folder_path, "'")
+    stop(
+      "File '",
+      file_name_with_extension,
+      "' does not exist in folder: '",
+      folder_path,
+      "'"
+    )
   }
 
   # Determine the file extension of the target file
@@ -96,26 +109,32 @@ ers_read_clean <- function(folder_path,
   if (tools::file_ext(file_name_with_extension) == "csv") {
     # For CSV files, use `fread` with specified skip and NA values
     raw_data <- fread(temp_file, skip = skip_rows, na.strings = na_values)
-  }
-  else if (tools::file_ext(file_name_with_extension) %in% c("xls", "xlsx")) {
+  } else if (tools::file_ext(file_name_with_extension) %in% c("xls", "xlsx")) {
     # For Excel files, use `read_excel` with the specified sheet name, skip rows, and NA values
-    raw_data <- read_excel(temp_file, sheet = sheet_name,
-                           skip = skip_rows, na = na_values, guess_max = 100000)
-  }
-  else {
+    raw_data <- read_excel(
+      temp_file,
+      sheet = sheet_name,
+      skip = skip_rows,
+      na = na_values,
+      guess_max = 100000
+    )
+  } else {
     # Stop execution for unsupported file formats
-    stop("Unsupported file format. Supported formats are xls, xlsx, csv: '",
-         file_name_with_extension, "'")
+    stop(
+      "Unsupported file format. Supported formats are xls, xlsx, csv: '",
+      file_name_with_extension,
+      "'"
+    )
   }
 
   # Check if clean_names is TRUE and file name does NOT contain ".shp"
-  if (clean_names == TRUE && !grepl("\\.shp$",
-                                    file_name_with_extension,
-                                    ignore.case = TRUE)) {
+  if (
+    clean_names == TRUE &&
+      !grepl("\\.shp$", file_name_with_extension, ignore.case = TRUE)
+  ) {
     raw_data <- raw_data %>%
       janitor::clean_names()
   }
-
 
   # Return the loaded data
   return(raw_data)

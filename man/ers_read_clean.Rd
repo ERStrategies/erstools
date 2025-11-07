@@ -11,7 +11,7 @@ ers_read_clean(
   drive_name = "client_work_drive",
   skip_rows = 0,
   na_values = c(""),
-  clean_names = "TRUE"
+  clean_names = TRUE
 )
 }
 \arguments{
